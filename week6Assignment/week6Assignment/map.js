@@ -28,16 +28,23 @@ Main = (function() {
       container: "map",
       viewingMode: "global",
       map: map,
-      camera: {
-        position: { x: -105.503, y: 44.270, z: 20000000, spatialReference: { wkid: 4326 } },
-        heading: 0,
-        tilt: 0
-      },
+     camera: {
+  position: { 
+    x: -119.4179,
+    y: 36.7783,
+    z: 1500000,    
+    spatialReference: { wkid: 4326 }   // no extra comma needed here
+  },
+  heading: 0,
+  tilt: 20,
+  
+},
       popup: {
         dockEnabled: true,
         dockOptions: { breakpoint: false }
       },
-      environment: { lighting: { directShadowsEnabled: false } }
+      environment: { lighting: { directShadowsEnabled: false }, 
+    }
     });
 
     const graphicsLayer = new GraphicsLayer({
@@ -65,13 +72,46 @@ Main = (function() {
       const pinGraphic = new Graphic({
         geometry: point,
         symbol: pinSymbol,
-        popupTemplate: {
-          title: key + ": " + value.city + ", " + value.state
-        }
-      });
+       popupTemplate: {
+    title: key + ":",
+    content: "<span style='color:blue; font-weight:bold;'>City:</span> " + value.city +
+         "<br><span style='color:green; font-weight:bold;'>State:</span> " + value.state
+  }
+});
 
       graphicsLayer.add(pinGraphic);
     }
+ view.on("click", async (event) => {
+    const response = await view.hitTest(event, { include: graphicsLayer });
+
+    if (response.results.length) {
+      const graphic = response.results[0].graphic;
+
+      view.goTo(
+        {
+          target: graphic.geometry,
+          tilt: 20,
+          scale: 100000
+        },
+        {
+          duration: 1000,
+          easing: "ease-in-out"
+        }
+      );
+
+      view.popup.open({
+        features: [graphic],
+        location: graphic.geometry
+      });
+    }
+  });
+
+
+
+
+
+
+
   };
 
   // Run after DOM is built so #map exists
