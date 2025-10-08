@@ -1,13 +1,12 @@
 var Main;
 
-// ESM imports
+
 import Map from "https://js.arcgis.com/4.33/@arcgis/core/Map.js";
 import Graphic from "https://js.arcgis.com/4.33/@arcgis/core/Graphic.js";
 import GraphicsLayer from "https://js.arcgis.com/4.33/@arcgis/core/layers/GraphicsLayer.js";
 import ElevationLayer from "https://js.arcgis.com/4.33/@arcgis/core/layers/ElevationLayer.js";
 import SceneView from "https://js.arcgis.com/4.33/@arcgis/core/views/SceneView.js";
 import Search from "https://js.arcgis.com/4.33/@arcgis/core/widgets/Search.js";
-import SearchSource from "https://js.arcgis.com/4.33/@arcgis/core/widgets/Search/SearchSource.js";
 import Point from "https://js.arcgis.com/4.33/@arcgis/core/geometry/Point.js";
 import Extent from "https://js.arcgis.com/4.33/@arcgis/core/geometry/Extent.js";
 
@@ -82,7 +81,7 @@ Main = (function () {
       graphicsLayer.add(pinGraphic);
     }
 
-    // Click → zoom to the clicked POI + open popup
+   
     view.on("click", async (event) => {
       const response = await view.hitTest(event, { include: graphicsLayer });
       if (response.results.length) {
@@ -107,7 +106,7 @@ Main = (function () {
       }
     });
 
-    // 15 cities across the U.S.
+   
     const cities = [
       { name: "New York",        coords: [-74.0060, 40.7128] },
       { name: "Los Angeles",     coords: [-118.2437, 34.0522] },
@@ -126,7 +125,7 @@ Main = (function () {
       { name: "Washington DC",   coords: [-77.0369, 38.9072] }
     ];
 
-    // Custom SearchSource using the predefined list
+  
  const citySource = {
   name: "Cities",
   placeholder: "Search for a city",
@@ -138,7 +137,7 @@ Main = (function () {
       .map(c => ({
         key: c.name,
         text: c.name,
-        sourceIndex: 0  // 👈 required by widget internals
+        sourceIndex: 0  
       }));
   },
   getResults: (params) => {
@@ -172,7 +171,7 @@ Main = (function () {
   }
 };
 
-// --- Search widget ---
+
 const searchWidget = new Search({
   view,
   includeDefaultSources: false,
@@ -183,11 +182,11 @@ const searchWidget = new Search({
 
 view.ui.add(searchWidget, "top-right");
 
-// --- Debugging events ---
+
 searchWidget.on("search-start", () => console.log("Search started"));
 searchWidget.on("search-complete", (e) => console.log("Search complete:", e));
 searchWidget.on("select-result", (e) => console.log("Select result:", e));
-  }; // <-- close initMap
+  }; 
 
   window.addEventListener("DOMContentLoaded", initMap);
 
